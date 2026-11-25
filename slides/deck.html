@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Company A — Churn Prevention &amp; High-Value Retention PoC</title>
+<style>
+  @page {
+    size: 13.333in 7.5in;
+    margin: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    color: #1E293B;
+    background: #E2E8F0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  :root {
+    --navy: #0B1F3A;
+    --navy-mid: #16325C;
+    --teal: #0D9488;
+    --teal-light: #CCFBF1;
+    --blue: #2563EB;
+    --blue-light: #DBEAFE;
+    --amber: #D97706;
+    --amber-light: #FEF3C7;
+    --red: #DC2626;
+    --red-light: #FEE2E2;
+    --slate-50: #F8FAFC;
+    --slate-100: #F1F5F9;
+    --slate-200: #E2E8F0;
+    --slate-500: #64748B;
+    --slate-700: #334155;
+  }
+
+  .slide {
+    width: 13.333in;
+    height: 7.5in;
+    padding: 0.38in 0.52in 0.34in 0.52in;
+    background: #FFFFFF;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    page-break-after: always;
+    break-after: page;
+    margin: 0 auto 16px auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  }
+
+  .slide:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  @media print {
+    body { background: #FFFFFF; }
+    .slide {
+      margin: 0;
+      box-shadow: none;
+    }
+  }
+
+  /* Header & Footer */
+  .slide-header {
+    border-bottom: 2px solid var(--slate-200);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 2px;
+  }
+  .slide-title {
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.15;
+  }
+  .slide-subtitle {
+    font-size: 11.5px;
+    color: var(--slate-500);
+    margin-top: 2px;
+  }
+  .header-badge {
+    background: var(--navy);
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .slide-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .slide-footer {
+    border-top: 1px solid var(--slate-200);
+    padding-top: 6px;
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9.5px;
+    color: var(--slate-500);
+    flex-shrink: 0;
+  }
+
+  /* Cover Slide */
+  .slide-cover {
+    background: linear-gradient(135deg, #07162B 0%, #0B1F3A 55%, #12335B 100%);
+    color: #FFFFFF;
+    padding: 0.6in 0.7in;
+    justify-content: space-between;
+  }
+  .cover-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cover-tag {
+    display: inline-block;
+    background: rgba(13, 148, 136, 0.2);
+    border: 1px solid #14B8A6;
+    color: #5EEAD4;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 4px;
+  }
+  .cover-meta-right {
+    font-size: 11.5px;
+    color: #94A3B8;
+    font-weight: 500;
+  }
+  .cover-center {
+    margin: auto 0;
+    max-width: 10.5in;
+  }
+  .cover-title {
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+    color: #FFFFFF;
+  }
+  .cover-title span {
+    color: #2DD4BF;
+  }
+  .cover-subtitle {
+    font-size: 16px;
+    line-height: 1.45;
+    color: #CBD5E1;
+    max-width: 9in;
+    margin-bottom: 24px;
+  }
+  .cover-author-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    background: rgba(255,255,255,0.06);
+    border-left: 4px solid #14B8A6;
+    padding: 10px 18px;
+    border-radius: 0 6px 6px 0;
+    font-size: 12.5px;
+    color: #E2E8F0;
+  }
+  .cover-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    border-top: 1px solid rgba(255,255,255,0.14);
+    padding-top: 18px;
+  }
+  .cover-kpi {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .cover-kpi-val {
+    font-size: 22px;
+    font-weight: 800;
+    color: #2DD4BF;
+  }
+  .cover-kpi-lbl {
+    font-size: 10.5px;
+    color: #CBD5E1;
+    margin-top: 2px;
+  }
+
+  /* Grid & Card Helpers */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; min-height: 0; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; min-height: 0; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; min-height: 0; }
+  .grid-12-8 { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 14px; min-height: 0; }
+  .grid-8-12 { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 14px; min-height: 0; }
+  .grid-55-45 { display: grid; grid-template-columns: 55% 43.5%; gap: 1.5%; min-height: 0; }
+  .grid-45-55 { display: grid; grid-template-columns: 44% 54.5%; gap: 1.5%; min-height: 0; }
+
+  .card {
+    background: var(--slate-50);
+    border: 1px solid var(--slate-200);
+    border-radius: 6px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .card-white {
+    background: #FFFFFF;
+    border: 1px solid var(--slate-200);
+    border-radius: 6px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .card-navy {
+    background: var(--navy);
+    color: #FFFFFF;
+    border-radius: 6px;
+    padding: 10px 14px;
+  }
+  .card-teal {
+    background: #F0FDFA;
+    border: 1px solid #99F6E4;
+    border-left: 4px solid var(--teal);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .card-amber {
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-left: 4px solid var(--amber);
+    border-radius: 6px;
+    padding: 9px 12px;
+  }
+  .card-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* KPI Strip */
+  .kpi-box {
+    background: var(--slate-50);
+    border: 1px solid var(--slate-200);
+    border-top: 3px solid var(--navy);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .kpi-box.accent { border-top-color: var(--teal); background: #F0FDFA; }
+  .kpi-box.blue { border-top-color: var(--blue); background: #EFF6FF; }
+  .kpi-box.amber { border-top-color: var(--amber); background: #FFFBEB; }
+  .kpi-val { font-size: 19px; font-weight: 800; color: var(--navy); line-height: 1.1; }
+  .kpi-box.accent .kpi-val { color: #0F766E; }
+  .kpi-lbl { font-size: 10px; font-weight: 600; color: var(--slate-500); text-transform: uppercase; margin-top: 2px; }
+  .kpi-sub { font-size: 10px; color: var(--slate-700); margin-top: 2px; }
+
+  /* Lists */
+  ul.clean {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  ul.clean li {
+    font-size: 11px;
+    line-height: 1.38;
+    padding-left: 12px;
+    position: relative;
+    color: var(--slate-700);
+  }
+  ul.clean li::before {
+    content: "▪";
+    position: absolute;
+    left: 0;
+    color: var(--teal);
+    font-weight: bold;
+  }
+  ul.clean li strong { color: var(--navy); }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10.5px;
+  }
+  th {
+    background: var(--navy);
+    color: #FFFFFF;
+    font-weight: 600;
+    text-align: left;
+    padding: 5px 7px;
+    font-size: 10px;
+  }
+  th.num, td.num { text-align: right; }
+  td {
+    padding: 5px 7px;
+    border-bottom: 1px solid var(--slate-200);
+    color: var(--slate-700);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: var(--slate-50); }
+  tr.highlight td {
+    background: #CCFBF1 !important;
+    font-weight: 700;
+    color: var(--navy);
+    border-top: 1.5px solid var(--teal);
+    border-bottom: 1.5px solid var(--teal);
+  }
+  tr.winner td {
+    background: #EFF6FF !important;
+    font-weight: 700;
+    color: var(--navy);
+  }
+
+  /* Figures */
+  .fig-wrap {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF;
+    border: 1px solid var(--slate-200);
+    border-radius: 6px;
+    padding: 6px;
+    overflow: hidden;
+  }
+  .fig-wrap img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .fig-caption {
+    font-size: 9.5px;
+    color: var(--slate-500);
+    margin-top: 4px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 9.5px;
+    font-weight: 700;
+  }
+  .pill-teal { background: var(--teal-light); color: #0F766E; }
+  .pill-blue { background: var(--blue-light); color: #1D4ED8; }
+  .pill-amber { background: var(--amber-light); color: #B45309; }
+  .pill-red { background: var(--red-light); color: #B91C1C; }
+
+  .callout-bar {
+    background: var(--navy);
+    color: #FFFFFF;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 11px;
+    line-height: 1.35;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .callout-bar strong { color: #2DD4BF; }
+
+  .ref-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 10px;
+    line-height: 1.32;
+  }
+  .ref-item {
+    background: var(--slate-50);
+    border: 1px solid var(--slate-200);
+    border-radius: 4px;
+    padding: 5px 8px;
+  }
+  .ref-num {
+    font-weight: 800;
+    color: var(--teal);
+    margin-right: 4px;
+  }
+  .ref-url {
+    color: var(--blue);
+    word-break: break-all;
+    font-size: 9.2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== SLIDE 1: TITLE SLIDE ==================== -->
+<section class="slide slide-cover">
+  <div class="cover-top">
+    <span class="cover-tag">GCI World 2026 · Final Assignment</span>
+    <span class="cover-meta-right">US Wireless Telecommunications · Analytics &amp; Retention Strategy</span>
+  </div>
+
+  <div class="cover-center">
+    <h1 class="cover-title">Company A <span>Churn Prevention</span> &amp;<br>High-Value Retention PoC</h1>
+    <p class="cover-subtitle">
+      Diagnosing $2.87M/month in subscriber attrition, deploying leakage-free XGBoost propensity modeling, and quantifying a Two-Tier Retention Program with 150.3% 6-month ROI.
+    </p>
+    <div class="cover-author-box">
+      <div><strong>Presenter:</strong> Jose Alonso Yanez Mejia</div>
+      <div>|</div>
+      <div><strong>Scope:</strong> 100,000-Subscriber Base · 100 Features · 90-Day A/B Pilot</div>
+    </div>
+  </div>
+
+  <div class="cover-kpis">
+    <div class="cover-kpi">
+      <div class="cover-kpi-val">$2.87M / mo</div>
+      <div class="cover-kpi-lbl">Churned Revenue at Risk (49.56% Churn)</div>
+    </div>
+    <div class="cover-kpi">
+      <div class="cover-kpi-val">0.6981</div>
+      <div class="cover-kpi-lbl">XGBoost Held-Out Test ROC-AUC</div>
+    </div>
+    <div class="cover-kpi">
+      <div class="cover-kpi-val">+$704.5K / +$1.88M</div>
+      <div class="cover-kpi-lbl">Net Impact (6-Mo / 12-Mo @ 20% Win-Back)</div>
+    </div>
+    <div class="cover-kpi">
+      <div class="cover-kpi-val">150.3% / 400.6%</div>
+      <div class="cover-kpi-lbl">Program ROI (6-Mo / 12-Mo Horizon)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 2: EXECUTIVE SUMMARY ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="eyebrow">01 · Executive Summary</div>
+      <div class="slide-title">Targeted Two-Tier Retention Protects +$1.88M (12-Mo) at 400.6% ROI</div>
+      <div class="slide-subtitle">Replacing costly blanket discounts ($2.50M) with ML-driven, value-matched interventions ($468.7K)</div>
+    </div>
+    <div class="header-badge">90-Day Pilot Ask: $46.9K</div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-4" style="flex-shrink: 0;">
+      <div class="kpi-box">
+        <div class="kpi-val">$2.87M / mo</div>
+        <div class="kpi-lbl">Monthly Churn Loss</div>
+        <div class="kpi-sub">49.56% churn ($34.45M/yr)</div>
+      </div>
+      <div class="kpi-box accent">
+        <div class="kpi-val">+$704.5K</div>
+        <div class="kpi-lbl">6-Month Net Impact</div>
+        <div class="kpi-sub">150.3% ROI · 7.99% break-even</div>
+      </div>
+      <div class="kpi-box blue">
+        <div class="kpi-val">+$1.88M</div>
+        <div class="kpi-lbl">12-Month Net Impact</div>
+        <div class="kpi-sub">400.6% ROI · 4.00% break-even</div>
+      </div>
+      <div class="kpi-box amber">
+        <div class="kpi-val">$663.0K</div>
+        <div class="kpi-lbl">CAC Avoided (Upside)</div>
+        <div class="kpi-sub">2,652 retained × $250 floor</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="flex: 1;">
+      <div class="card">
+        <div class="card-title">1. The Business Problem <span class="pill pill-red">Severe Leakage</span></div>
+        <ul class="clean">
+          <li><strong>49.56% Observed Churn:</strong> 49,562 of 100,000 subscribers churned, eroding <strong>$2.87M/month</strong> ($34.45M/year) of a $5.85M/month revenue base.</li>
+          <li><strong>Far Above Industry Norms:</strong> Big Three US postpaid churn averages <strong>0.7%–1.1%/mo</strong> (~8%–13%/yr); replacement CAC runs <strong>$250–$600+</strong> per subscriber.</li>
+          <li><strong>Blanket Offers Fail:</strong> Offering $25 to all 100k users costs <strong>$2.50M</strong>, wastes $1.26M on non-churners, and yields only <strong>37.4%</strong> 6-mo ROI.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">2. Predictive ML Insight <span class="pill pill-blue">XGBoost 0.6981 AUC</span></div>
+        <ul class="clean">
+          <li><strong>Strong Non-Linear Signal:</strong> XGBoost achieves <strong>0.6981 Test ROC-AUC</strong> (0.6864 PR-AUC), outperforming Logistic Regression (+5.7 pp) with zero CV-to-Test gap.</li>
+          <li><strong>High Risk Concentration:</strong> Top Quintile (<strong>Q5</strong>) hits <strong>74.00%</strong> churn (1.49x lift); Top Decile (<strong>D10</strong>) hits <strong>78.50%</strong> (4.05x vs. D1).</li>
+          <li><strong>Intervenable Drivers:</strong> 10 of top 15 features are actionable—led by <strong>handset age &gt;365d</strong> (<code>eqpdays_gt_365</code>), device price, refurbished flag, ASL, and usage drops.</li>
+        </ul>
+      </div>
+
+      <div class="card-teal">
+        <div class="card-title">3. Two-Tier Retention Proposal <span class="pill pill-teal">19,340 Subs (19.3%)</span></div>
+        <ul class="clean">
+          <li><strong>Tier 1A (4,175 subs @ $45):</strong> High-Value (<code>rev_Mean &gt;= $70.76</code>) + Risk Q4/Q5 + Ageing Handset (<code>&gt;365d</code>) → EIP upgrade credit + priority care.</li>
+          <li><strong>Tier 1B (5,335 subs @ $25):</strong> High-Value + Risk Q4/Q5 + Newer Handset → Plan-rightsizing/ASL enrollment + priority care.</li>
+          <li><strong>Tier 2 (9,830 subs @ $15):</strong> Mass-market Risk Q5 + intervenable trigger → 100% automated SMS/app self-service offer.</li>
+        </ul>
+      </div>
+
+      <div class="card-amber">
+        <div class="card-title">4. Financial Impact &amp; Pilot Ask <span class="pill pill-amber">90-Day A/B Test</span></div>
+        <ul class="clean">
+          <li><strong>81.3% Lower Spend:</strong> <strong>$468,700</strong> total budget ($24.23/user) protects <strong>$1.17M (6m)</strong> and <strong>$2.35M (12m)</strong> at a conservative 20% win-back rate.</li>
+          <li><strong>Resilient Downside:</strong> Cash-flow positive at 6 months even at <strong>10% win-back</strong> (+$117.9K); 7.99% 6-mo / 4.00% 12-mo break-even.</li>
+          <li><strong>Decision Ask:</strong> Approve a <strong>90-day 50/50 A/B pilot</strong> on 20% of the cohort (3,868 subs, <strong>$46,870</strong> budget; Go threshold <strong>&ge;8.0 pp</strong> churn reduction).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Company A · Churn Prevention &amp; High-Value Retention PoC</span>
+    <span>Slide 2 / 14</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 3: MARKET ANALYSIS ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="eyebrow">02 · Market Analysis</div>
+      <div class="slide-title">US Wireless Landscape: High Switching Costs &amp; Care-Driven Churn</div>
+      <div class="slide-subtitle">External benchmarks confirm retention ($15–$35) is 10x–20x cheaper than replacement CAC ($250–$600+)</div>
+    </div>
+    <div class="header-badge">2024–2026 Industry Benchmarks</div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-3" style="flex-shrink: 0;">
+      <div class="kpi-box">
+        <div class="kpi-val">$450B–$470B</div>
+        <div class="kpi-lbl">US Telecom Market Size [1][2]</div>
+        <div class="kpi-sub">5.8%–7.9% CAGR; Big 3 hold ~95% postpaid [3]</div>
+      </div>
+      <div class="kpi-box accent">
+        <div class="kpi-val">0.7%–1.1% / mo</div>
+        <div class="kpi-lbl">Tier-1 Postpaid Churn [5][6]</div>
+        <div class="kpi-sub">~8%–13% annualized vs. 2.5%–3.8%/mo prepaid</div>
+      </div>
+      <div class="kpi-box blue">
+        <div class="kpi-val">$250–$600+</div>
+        <div class="kpi-lbl">Replacement CAC vs. Retention [7]</div>
+        <div class="kpi-sub">$15–$35/user targeted retention benchmark</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="flex: 1;">
+      <div class="card-white">
+        <div class="card-title">Competitive Dynamics &amp; Churn Benchmarks</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Carrier / Segment</th>
+              <th class="num">Share / Scale</th>
+              <th class="num">Monthly Churn</th>
+              <th class="num">ARPU / ARPA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>T-Mobile</strong> [2][3][5]</td>
+              <td class="num">~35% postpaid</td>
+              <td class="num">~0.90%–0.98%</td>
+              <td class="num">$150–$153+ ARPA</td>
+            </tr>
+            <tr>
+              <td><strong>Verizon</strong> [2][3][5]</td>
+              <td class="num">~34% postpaid</td>
+              <td class="num">~0.80%–0.98%</td>
+              <td class="num">$165–$170+ ARPA</td>
+            </tr>
+            <tr>
+              <td><strong>AT&amp;T</strong> [2][3][5]</td>
+              <td class="num">~27% postpaid</td>
+              <td class="num">~0.75%–0.98%</td>
+              <td class="num">$53–$54+ ARPU</td>
+            </tr>
+            <tr>
+              <td><strong>Prepaid / Non-Contract</strong> [6]</td>
+              <td class="num">Value / MVNO</td>
+              <td class="num">2.5%–3.8%</td>
+              <td class="num">Lower lock-in</td>
+            </tr>
+            <tr class="highlight">
+              <td><strong>Company A (PoC Base)</strong></td>
+              <td class="num">100,000 subs</td>
+              <td class="num">49.56% (31–60d)</td>
+              <td class="num">$58.72 mean rev</td>
+            </tr>
+          </tbody>
+        </table>
+        <ul class="clean" style="margin-top: 8px;">
+          <li><strong>Flat Core ARPU:</strong> Growth relies on premium unlimited tiers and Fixed Wireless Access (FWA) / fiber-mobile bundling, which lowers churn [4][5].</li>
+          <li><strong>Cable &amp; Value MVNO Pressure:</strong> Xfinity, Spectrum, and Mint capture inflation-sensitive subscribers on Big Three networks [3].</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Industry Churn Drivers &amp; Strategic Implications</div>
+        <ul class="clean">
+          <li><strong>Customer Care Effort (J.D. Power 2026) [8]:</strong> Ease-of-business drives loyalty—low-effort resolution scores <strong>786/1,000</strong> vs. <strong>554/1,000</strong> for high-effort experiences.</li>
+          <li><strong>Speed &amp; Zero-Transfer SLA [8]:</strong> Resolving issues in <strong>&lt;10 minutes</strong> protects retention, whereas <strong>20%–25% transfer rates</strong> sharply elevate switching intent.</li>
+          <li><strong>Billing &amp; Promo Complexity [9]:</strong> Multi-tier bundles, 24–36 mo trade-in credits, and unexpected overages ("bill shock") trigger care calls and attrition.</li>
+          <li><strong>Handset Upgrade / EIP Lifecycle [9]:</strong> Competitor trade-in promos peak around Q4 launches; customers completing Equipment Installment Plans (EIPs) are prime poaching targets.</li>
+          <li><strong>AI Shift [7]:</strong> Leading carriers replace blanket discounts with ML early-warning triggers (usage drops, EIP payoff, billing shocks) to deploy $15–$35 targeted perks.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout-bar">
+      <span><strong>Strategic Takeaway:</strong> With Company A's mean revenue ($58.72/mo) aligned to Tier-1 phone ARPU ($53–$54+), preventing churn via $15–$45 targeted interventions yields massive payback vs. $250–$600+ replacement CAC [2][7].</span>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Sources: [1] Grand View Research · [2] Mordor Intelligence · [3] TeleGeography · [4] PwC · [5] Motley Fool · [6] ChurnCost · [7] Artisan Growth · [8] J.D. Power · [9] Telecompetitor</span>
+    <span>Slide 3 / 14</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 4: EDA (1/2) ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="eyebrow">03 · Exploratory Data Analysis (1/2)</div>
+      <div class="slide-title">Data Audit &amp; Revenue at Risk: $2.87M/Mo Churned ($832K/Mo in HV + Ageing)</div>
+      <div class="slide-subtitle">100,000 subscribers × 100 features (Client.csv + Record.csv 1:1 inner merge; 0 duplicates; zero target leakage)</div>
+    </div>
+    <div class="header-badge">High-Value Q4: rev &ge; $70.76</div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-45-55" style="flex: 1;">
+      <div style="display: flex; flex-direction: column; gap: 8px; min-height: 0;">
+        <div class="card">
+          <div class="card-title">1. Data Quality &amp; Leakage Audit</div>
+          <ul class="clean">
+            <li><strong>Clean Merge:</strong> 100,000 × 100 cols (69 float, 21 str, 10 int); 0 unmatched IDs, 0 constant columns.</li>
+            <li><strong>Missingness (43/100 cols):</strong> Concentrated in 3rd-party demographics (<code>numbcars</code> 49.4%, <code>dwllsize</code> 38.3%, <code>income</code> 25.4%); core billing &amp; usage are <strong>&gt;97% complete</strong>.</li>
+            <li><strong>Anomalies &amp; Collinearity:</strong> 133 rows with <code>eqpdays &lt; 0</code> (min -5) &amp; 5 rows with <code>rev_Mean &lt; 0</code>; near-duplicate pairs (<code>totrev</code>/<code>adjrev</code> r=0.9985, <code>totmou</code>/<code>adjmou</code> r=0.9997).</li>
+            <li><strong>Zero Target Leakage:</strong> Max linear |r| with <code>churn</code> is <code>eqpdays</code> (+0.1127), confirming no post-outcome columns.</li>
+          </ul>
+        </div>
+
+        <div class="card-teal" style="flex: 1;">
+          <div class="card-title">2. Revenue Pool &amp; High-Value At-Risk Sizing</div>
+          <ul class="clean">
+            <li><strong>Balanced Target:</strong> <code>49.56%</code> churned (49,562) vs. <code>50.44%</code> retained (50,438).</li>
+            <li><strong>Monthly Revenue Pool:</strong> Total <strong>$5.85M/mo</strong> (mean <code>$58.72</code>, median <code>$48.20</code>); <strong>$2.87M/mo ($34.45M/yr)</strong> is in the churned group.</li>
+            <li><strong>Top Revenue Quartile (Q4, rev &ge; $70.76):</strong> 24,910 subs, mean <strong>$114.03/mo</strong>, 48.61% churn.</li>
+            <li><strong>Q4 + Ageing Handset (eqpdays &gt; 365):</strong> <strong>7,763 subs</strong> (31.2% of Q4) churn at <strong>55.21%</strong> (59.50% at &gt;730d) — <strong>$832,098/mo ($9.99M/yr)</strong> at immediate risk.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="fig-wrap">
+        <img src="../outputs/figures/eda_value_vs_churn_segments.png" alt="Churn Rate Heatmap by Revenue Quartile and Handset Age">
+        <div class="fig-caption">Figure 1: Churn rate (%) across Monthly Revenue Quartiles × Handset Age (eqpdays) — Q4 + Ageing Handsets (&gt;365d) represent $832K/mo at risk.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Source: scripts/01_eda.py &amp; outputs/eda_summary.md (n = 100,000 subscribers)</span>
+    <span>Slide 4 / 14</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 5: EDA (2/2) ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="eyebrow">04 · Exploratory Data Analysis (2/2)</div>
+      <div class="slide-title">Intervenable Pain Points: Ageing Handsets, Silent Drops &amp; Overage Shock</div>
+      <div class="slide-subtitle">Attrition is non-random and clusters around equipment age (+16.1 pp), silent usage declines (+9.6 pp), and bill shock</div>
+    </div>
+    <div class="header-badge">4 Actionable Levers</div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-2" style="flex: 1; min-height: 0;">
+      <div class="fig-wrap">
+        <img src="../outputs/figures/eda_churn_by_eqpdays.png" alt="Churn by Handset Age (eqpdays)">
+        <div class="fig-caption">Handset Age (eqpdays): Churn rises monotonically from 41.81% (1–180d) to 53.71% (366–540d) and 57.89% (&gt;730d).</div>
+      </div>
+      <div class="fig-wrap">
+        <img src="../outputs/figures/eda_overage_and_usage_change.png" alt="Churn by Usage Change and Overage">
+        <div class="fig-caption">Usage Drop &amp; Overage: change_mou &lt; -200 churns at 54.99% (+9.6 pp); overage &gt;50% of bill churns at 55.31% ($115.45/mo mean rev).</div>
+      </div>
+    </div>
+
+    <div class="grid-4" style="flex-shrink: 0;">
+      <div class="card">
+        <div class="card-title" style="font-size: 11px;">1. Handset Age &amp; Tier</div>
+        <p style="font-size: 10px; line-height: 1.35; color: var(--slate-700);">
+          <strong>+16.1 pp</strong> spread (41.81% &rarr; 57.89% &gt;730d). Entry devices (&le;$50) churn at <strong>57.46%</strong> vs. 41.33% ($151–$200); Refurb (<code>R</code>, 14.4%) <strong>53.44%</strong> vs. 48.91% New.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size: 11px;">2. Silent Churners</div>
+        <p style="font-size: 10px; line-height: 1.35; color: var(--slate-700);">
+          <strong>55.69%</strong> of base made <strong>0 care calls</strong> and churn at <strong>51.76%</strong> vs. 44.15% (&gt;5 calls). Proactive outbound outreach is essential—churners leave silently.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size: 11px;">3. Usage &amp; Overage Shock</div>
+        <p style="font-size: 10px; line-height: 1.35; color: var(--slate-700);">
+          <code>change_mou &lt; -200</code> churns at <strong>54.99%</strong> ($87.74/mo rev). Overage &gt;50% of bill (9.3% of base, $115.45/mo) churns at <strong>55.31%</strong>.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size: 11px;">4. ASL &amp; Tenure Window</div>
+        <p style="font-size: 10px; line-height: 1.35; color: var(--slate-700);">
+          <code>asl_flag=Y</code> (13.9%) churns at <strong>40.93%</strong> vs. <strong>50.96%</strong> (<code>N</code>) — a 10.0 pp protector. Tenure churn peaks at <strong>13–18 mo (52.72%)</strong>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Source: scripts/01_eda.py &amp; outputs/eda_summary.md</span>
+    <span>Slide 5 / 14</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 6: PROBLEM DEFINITION & FEATURE ENGINEERING ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="eyebrow">05 · Methodology &amp; Feature Engineering</div>
+      <div class="slide-title">Leakage-Free Pipeline &amp; 13 Engineered Intervenable Features</div>
+      <div class="slide-subtitle">Strict train/test isolation across 100,000 subscribers (80/20 stratified split + 5-fold Stratified CV)</div>
+    </div>
+    <div class="header-badge">92 Numeric + 21 Categorical = 113 Features</div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-3" style="flex-shrink: 0;">
+      <div class="card-navy">
+        <div style="font-size: 10px; color: #5EEAD4; font-weight: 700; text-transform: uppercase;">Prediction Target</div>
+        <div style="font-size: 15px; font-weight: 700; margin: 3px 0;">31–60 Day Churn (<code>churn</code>)</div>
+        <div style="font-size: 10.5px; color: #CBD5E1;">Binary attrition observed 31–60 days post-snapshot; 49.56% positive rate.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Validation Protocol</div>
+        <ul class="clean">
+          <li><strong>80/20 Stratified Split:</strong> 80,000 train / 20,000 held-out test (<code>random_state=42</code>).</li>
+          <li><strong>5-Fold Stratified CV:</strong> All medians, missing flags, OHE, and scalers fit strictly inside <code>sklearn</code> Pipelines on training folds.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Anomaly &amp; Collinearity Rules</div>
+        <ul class="clean">
+          <li><strong>Anomaly Clipping:</strong> <code>eqpdays &lt; 0</code> (133 rows) &amp; <code>rev_Mean &lt; 0</code> (5 rows) clipped to 0 + binary flags.</li>
+          <li><strong>Collinearity Guard:</strong> Dropped <code>adjqty</code>, <code>adjmou</code>, <code>adjrev</code> (r &ge; 0.9985) for Logistic Regression.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card-white" style="flex: 1;">
+      <div class="card-title">13 Engineered Intervenable &amp; Behavioral Features <span class="pill pill-teal">Domain-Grounded</span></div>
+      <table>
+        <thead>
+          <tr>
+            <th>Feature Category</th>
+            <th>Engineered Features (13 Total)</th>
+            <th>Formula / Definition</th>
+            <th>Retention Actionability</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Equipment Lifecycle</strong></td>
+            <td><code>eqpdays_gt_365</code>, <code>eqp_per_month</code></td>
+            <td><code>eqpdays &gt; 365</code>; <code>eqpdays / max(months*30, 1)</code></td>
+            <td>Triggers proactive EIP / handset upgrade credit</td>
+          </tr>
+          <tr>
+            <td><strong>Billing &amp; Overage Shock</strong></td>
+            <td><code>overage_share</code>, <code>mrc_share</code>, <code>roam_share</code></td>
+            <td><code>ovrrev_Mean / max(rev_Mean, 1)</code>; MRC &amp; roam ratios</td>
+            <td>Identifies bill-shock victims for plan-rightsizing &amp; ASL</td>
+          </tr>
+          <tr>
+            <td><strong>Usage &amp; Rev Trajectory</strong></td>
+            <td><code>mou_trend_ratio</code>, <code>rev_trend_ratio</code>, <code>mou_per_rev</code></td>
+            <td><code>avg3mou / max(avg6mou, 1)</code>; <code>avg3rev / max(avg6rev, 1)</code></td>
+            <td>Catches silent disengagement before cancellation</td>
+          </tr>
+          <tr>
+            <td><strong>Quality &amp; Care Friction</strong></td>
+            <td><code>drop_blk_rate</code>, <code>comp_rate</code>, <code>care_per_mou</code>, <code>has_custcare</code></td>
+            <td><code>drop_blk / attempt</code>; <code>complete / attempt</code>; <code>custcare &gt; 0</code></td>
+            <td>Separates silent churners from high-effort care contacts</td>
+          </tr>
+          <tr>
+            <td><strong>Account Structure</strong></td>
+            <td><code>active_line_ratio</code></td>
+            <td><code>actvsubs / max(uniqsubs, 1)</code></td>
+            <td>Distinguishes multi-line family accounts vs. single lines</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Source: scripts/02_modeling.py &amp; outputs/model_summary.md</span>
+    <span>Slide 6 / 14</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 7: MODEL EXPERIMENTS ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="eyebrow">06 · Model Experiments</div>
+      <div class="slide-title">XGBoost Wins Across All Metrics (0.6981 Test ROC-AUC, 0.6864 PR-AUC)</div>
+      <div class="slide-subtitle">Tree ensembles outperform Logistic Regression by +5.7 pp ROC-AUC with zero CV-to-Test generalization gap</div>
+    </div>
+    <div class="header-badge">Winner: XGBoost</div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-45-55" style="flex: 1;">
+      <div class="fig-wrap">
+        <img src="../outputs/figures/model_comparison_roc_auc.png" alt="Model Comparison ROC-AUC">
+        <div class="fig-caption">5-Fold CV ROC-AUC (&plusmn;std) vs. Held-Out Test ROC-AUC &amp; PR-AUC across 4 model families.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; min-height: 0;">
+        <div class="card-white">
+          <div class="card-title">Multi-Model Performance Benchmark (80k Train / 20k Test)</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Model Family</th>
+                <th class="num">5-Fold CV AUC</th>
+                <th class="num">Test ROC-AUC</th>
+                <th class="num">Test PR-AUC</th>
+                <th class="num">Test F1 (@0.50)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="winner">
+                <td>XGBoost <em>(Winner)</em></td>
+                <td class="num">0.6977 &plusmn; 0.0042</td>
+                <td class="num">0.6981</td>
+                <td class="num">0.6864</td>
+                <td class="num">0.6451</td>
+              </tr>
+              <tr>
+                <td>LightGBM</td>
+                <td class="num">0.6978 &plusmn; 0.0055</td>
+                <td class="num">0.6974</td>
+                <td class="num">0.6858</td>
+                <td class="num">0.6384</td>
+              </tr>
+              <tr>
+                <td>Random Forest</td>
+                <td class="num">0.6772 &plusmn; 0.0054</td>
+                <td class="num">0.6779</td>
+                <td class="num">0.6598</td>
+                <td class="num">0.6296</td>
+              </tr>
+              <tr>
+                <td>Logistic Regression</td>
+                <td class="num">0.6380 &plusmn; 0.0023</td>
+                <td class="num">0.6409</td>
+                <td class="num">0.6226</td>
+                <td class="num">0.5961</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-teal" style="flex: 1;">
+          <div class="card-title">Why XGBoost Was Selected</div>
+          <ul class="clean">
+            <li><strong>Top Held-Out Generalization:</strong> Leads on Test ROC-AUC (<strong>0.6981</strong>), Test PR-AUC (<strong>0.6864</strong>), Test F1 (<strong>0.6451</strong>), and Test Accuracy (<strong>0.6438</strong>).</li>
+            <li><strong>Zero Overfitting Gap:</strong> CV ROC-AUC (<code>0.6977</code>) &rarr; Test ROC-AUC (<code>0.6981</code>) confirms robust out-of-sample stability.</li>
+            <li><strong>Non-Linear Interactions:</strong> Captures +5.7 pp ROC-AUC and +6.4 pp PR-AUC over Logistic Regression by modeling interactions (e.g., handset age &times; tenure &times; usage drop).</li>
+            <li><strong>Tuned Hyperparameters:</strong> <code>n_estimators=400</code>, <code>max_depth=5</code>, <code>lr=0.05</code>, <code>subsample=0.8</code>, <code>colsample_bytree=0.8</code>, <code>reg_lambda=2.0</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Source: scripts/02_modeling.py &amp; outputs/model_summary.md</span>
+    <span>Slide 7 / 14</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 8: MODEL INSIGHTS ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="eyebrow">07 · Model Insights &amp; Risk Stratification</div>
+      <div class="slide-title">Threshold Tuning &amp; Risk Lift: 83.95% Recall @0.40 &amp; 74.00% Churn in Q5</div>
+      <div class="slide-subtitle">Top decile D10 reaches 78.50% churn (4.05x vs. D1); High-Value Q4+Q5 concentrates $139.6K/mo in 20% test set</div>
+    </div>
+    <div class="header-badge">Q5 Lift: 1.49x · D10: 78.50%</div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-2" style="flex: 1; min-height: 0;">
+      <div class="fig-wrap">
+        <img src="../outputs/figures/model_roc_pr_curves.png" alt="Test ROC and PR Curves">
+        <div class="fig-caption">Held-out Test ROC &amp; Precision-Recall curves across all 4 model families (XGBoost ROC-AUC 0.6981, PR-AUC 0.6864).</div>
+      </div>
+      <div class="fig-wrap">
+        <img src="../outputs/figures/model_risk_quintile_lift.png" alt="Risk Quintile Lift">
+        <div class="fig-caption">Test Risk Quintile Lift: Q5 hits 74.00% churn (1.49x lift, $162.9K/mo); High-Value Q4 Q5 hits 70.52% ($74.9K/mo).</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="flex-shrink: 0;">
+      <div class="card">
+        <div class="card-title" style="font-size: 11.5px;">Threshold Tuning for Asymmetric Cost (XGBoost)</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Threshold</th>
+              <th class="num">Flagged %</th>
+              <th class="num">Test Recall</th>
+              <th class="num">Precision</th>
+              <th class="num">Test F2</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight">
+              <td><strong>0.40 (High-Recall)</strong></td>
+              <td class="num">72.11%</td>
+              <td class="num">0.8395</td>
+              <td class="num">0.5769</td>
+              <td class="num">0.7695</td>
+            </tr>
+            <tr>
+              <td>0.50 (Balanced)</td>
+              <td class="num">50.82%</td>
+              <td class="num">0.6533</td>
+              <td class="num">0.6372</td>
+              <td class="num">0.6500</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card-teal">
+        <div class="card-title" style="font-size: 11.5px;">Risk Stratification Highlights (n = 20,000 Test)</div>
+        <ul class="clean">
+          <li><strong>Q5 (Highest, n=4,000):</strong> <strong>74.00%</strong> churn (1.49x lift), <strong>$162.9K/mo</strong> churned rev; <strong>D10</strong> hits <strong>78.50%</strong> (1.58x vs. D1 19.40%).</li>
+          <li><strong>High-Value Q4 (rev &ge; $70.76):</strong> Q5 hits <strong>70.52%</strong> churn ($74.9K/mo); Q4+Q5 captures <strong>$139.6K/mo</strong> (~$8.37M/yr scaled).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Source: outputs/test_predictions.csv &amp; outputs/model_summary.md</span>
+    <span>Slide 8 / 14</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 9: TOP INTERVENVABLE DRIVERS ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="eyebrow">08 · Feature Importance &amp; Actionability</div>
+      <div class="slide-title">10 of Top 15 XGBoost Drivers Are Directly Intervenable</div>
+      <div class="slide-subtitle">Equipment aging, device tier, spending limits, and usage trajectory provide concrete operational levers</div>
+    </div>
+    <div class="header-badge">XGBoost Gain Importance</div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-55-45" style="flex: 1;">
+      <div class="fig-wrap">
+        <img src="../outputs/figures/model_feature_importance.png" alt="XGBoost Top 15 Feature Importance">
+        <div class="fig-caption">Top 15 XGBoost churn drivers by Gain Importance, color-coded by Intervenable vs. Structural.</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; min-height: 0;">
+        <div class="card-white">
+          <div class="card-title">Key Intervenable Drivers &amp; Gain Share</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Driver Feature</th>
+                <th class="num">Gain %</th>
+                <th>Operational Lever</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="winner">
+                <td><code>eqpdays_gt_365</code> (#1)</td>
+                <td class="num">4.63%</td>
+                <td>EIP / Handset upgrade credit</td>
+              </tr>
+              <tr>
+                <td><code>eqpdays</code> (#2)</td>
+                <td class="num">2.59%</td>
+                <td>Continuous device aging trigger</td>
+              </tr>
+              <tr>
+                <td><code>hnd_price</code> (#6)</td>
+                <td class="num">1.21%</td>
+                <td>Subsidized &le;$50 device step-up</td>
+              </tr>
+              <tr>
+                <td><code>refurb_new_R / N</code> (#9–10)</td>
+                <td class="num">1.13% / 1.07%</td>
+                <td>Refurb-to-new swap voucher</td>
+              </tr>
+              <tr>
+                <td><code>asl_flag_N / Y</code> (#13, #15)</td>
+                <td class="num">0.98% / 0.95%</td>
+                <td>Account Spending Limit enrollment</td>
+              </tr>
+              <tr>
+                <td><code>mrc_share</code> (#17)</td>
+                <td class="num">0.89%</td>
+                <td>Plan-rightsizing vs. overage</td>
+              </tr>
+              <tr>
+                <td><code>change_mou</code> (#20)</td>
+                <td class="num">0.80%</td>
+                <td>Silent usage-drop outreach</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-teal" style="flex: 1;">
+          <div class="card-title">From Model Signal to Retention Playbook</div>
+          <ul class="clean">
+            <li><strong>Equipment Modernization:</strong> <code>eqpdays_gt_365</code> + <code>eqpdays</code> account for <strong>7.22%</strong> of total model gain—validating Tier 1A upgrade credits.</li>
+            <li><strong>Bill-Shock Protection:</strong> <code>asl_flag</code> + <code>mrc_share</code> highlight unprotected overage payers who stabilize when enrolled in ASL.</li>
+            <li><strong>Silent Intervention:</strong> <code>change_mou</code> &amp; missingness flags catch quiet disengagement before customers port out.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Source: scripts/02_modeling.py &amp; outputs/model_summary.md</span>
+    <span>Slide 9 / 14</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 10: BUSINESS PROPOSAL ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="eyebrow">09 · Business Proposal</div>
+      <div class="slide-title">Two-Tier Retention Architecture: 19,340 Subscribers ($468.7K Budget)</div>
+      <div class="slide-subtitle">Targeting 19.34% of base (68.56% churn rate, $1.173M/mo at risk) with value-matched offers ($15–$45/user)</div>
+    </div>
+    <div class="header-badge">Blended Cost: $24.23 / Sub</div>
+  </div>
+
+  <div class="slide-body">
+    <div class="card-white" style="flex: 1;">
+      <div class="card-title">Mutually Exclusive Tiered Targeting &amp; Intervention Playbook (Scaled to 100,000 Base)</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Tier &amp; Segment</th>
+            <th>Exact Eligibility Rules</th>
+            <th class="num">100k Base N</th>
+            <th class="num">Churn Rate</th>
+            <th class="num">Mean Rev</th>
+            <th>Concrete Intervention &amp; Channel</th>
+            <th class="num">Unit Cost</th>
+            <th class="num">Total Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Tier 1A</strong><br><span class="pill pill-amber">HV + Ageing</span></td>
+            <td><code>rev_Mean &ge; $70.76</code> (Q4) AND Risk <code>Q4/Q5</code> AND <code>eqpdays &gt; 365</code></td>
+            <td class="num"><strong>4,175</strong><br>(4.18%)</td>
+            <td class="num">62.04%</td>
+            <td class="num">$108.53</td>
+            <td><strong>Proactive EIP / Handset Upgrade Credit</strong> ($35) + <strong>Priority Care</strong> ($10, &lt;10-min SLA)</td>
+            <td class="num"><strong>$45.00</strong></td>
+            <td class="num"><strong>$187,875</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Tier 1B</strong><br><span class="pill pill-blue">HV + Newer</span></td>
+            <td><code>rev_Mean &ge; $70.76</code> (Q4) AND Risk <code>Q4/Q5</code> AND <code>eqpdays &le; 365</code></td>
+            <td class="num"><strong>5,335</strong><br>(5.34%)</td>
+            <td class="num">64.20%</td>
+            <td class="num">$122.40</td>
+            <td><strong>Plan-Rightsizing / Overage Relief + ASL</strong> ($15) + <strong>Priority Care</strong> ($10)</td>
+            <td class="num"><strong>$25.00</strong></td>
+            <td class="num"><strong>$133,375</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Tier 2</strong><br><span class="pill pill-teal">Mass Q5 Intv.</span></td>
+            <td><code>rev_Mean &lt; $70.76</code> AND Risk <code>Q5</code> AND (<code>eqpdays &gt; 365</code> OR overage &gt;$30/&gt;50% OR silent drop)</td>
+            <td class="num"><strong>9,830</strong><br>(9.83%)</td>
+            <td class="num">73.70%</td>
+            <td class="num">$46.29</td>
+            <td><strong>Automated SMS / App Self-Service</strong> (overage cap or refurb-to-new swap voucher)</td>
+            <td class="num"><strong>$15.00</strong></td>
+            <td class="num"><strong>$147,450</strong></td>
+          </tr>
+          <tr class="highlight">
+            <td><strong>Total (T1 + T2)</strong></td>
+            <td>Union of Tier 1A, Tier 1B, and Tier 2</td>
+            <td class="num">19,340<br>(19.34%)</td>
+            <td class="num">68.56%</td>
+            <td class="num">$79.64</td>
+            <td>Tiered Value-Matched Retention</td>
+            <td class="num">$24.23</td>
+            <td class="num">$468,700</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-3" style="flex-shrink: 0;">
+      <div class="card">
+        <div class="card-title" style="font-size: 11px;">Benchmark-Aligned Unit Costs</div>
+        <p style="font-size: 10.5px; line-height: 1.35; color: var(--slate-700);">
+          Tier 2 ($15) &amp; Tier 1B ($25) sit inside the <strong>$15–$35</strong> US retention benchmark; Tier 1A ($45) is <strong>5.6x–13.3x cheaper</strong> than $250–$600+ CAC.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size: 11px;">Operational Care Guardrail</div>
+        <p style="font-size: 10.5px; line-height: 1.35; color: var(--slate-700);">
+          Routing Tier 2 (50.8% of volume) to <strong>100% automated digital</strong> reserves live reps strictly for Tier 1 (~150 calls/day over 90 days).
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size: 11px;">Deadweight Cost Fully Priced</div>
+        <p style="font-size: 10.5px; line-height: 1.35; color: var(--slate-700);">
+          $468.7K cost is applied to <strong>all 19,340</strong> targeted users—explicitly pricing in the 31.4% non-churners.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Source: scripts/03_business_impact.py &amp; outputs/business_proposal.md</span>
+    <span>Slide 10 / 14</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 11: FINANCIAL IMPACT & TARGETING ROI ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="eyebrow">10 · Financial Impact &amp; ROI</div>
+      <div class="slide-title">81.3% Lower Spend &amp; 4.0x Higher ROI Than Blanket Retention</div>
+      <div class="slide-subtitle">At 20% win-back (2,652 subs retained, -2.65 pp base churn), program delivers +$704.5K (6m) and +$1.88M (12m) net</div>
+    </div>
+    <div class="header-badge">20% Base Win-Back Case</div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-4" style="flex-shrink: 0;">
+      <div class="kpi-box">
+        <div class="kpi-val">$468.7K</div>
+        <div class="kpi-lbl">Total Program Cost</div>
+        <div class="kpi-sub">81.3% below $2.50M blanket</div>
+      </div>
+      <div class="kpi-box accent">
+        <div class="kpi-val">+$704.5K</div>
+        <div class="kpi-lbl">6-Mo Net Impact (150.3% ROI)</div>
+        <div class="kpi-sub">$1,173.2K gross rev protected</div>
+      </div>
+      <div class="kpi-box blue">
+        <div class="kpi-val">+$1.88M</div>
+        <div class="kpi-lbl">12-Mo Net Impact (400.6% ROI)</div>
+        <div class="kpi-sub">$2,346.3K gross rev protected</div>
+      </div>
+      <div class="kpi-box amber">
+        <div class="kpi-val">$663.0K</div>
+        <div class="kpi-lbl">CAC Avoided (Excluded from ROI)</div>
+        <div class="kpi-sub">2,652 &times; $250 ($1.06M+ @ $400)</div>
+      </div>
+    </div>
+
+    <div class="grid-45-55" style="flex: 1; min-height: 0;">
+      <div class="card-white" style="justify-content: space-between;">
+        <div>
+          <div class="card-title">Targeting Strategy Comparison (100k Base, 20% Win-Back)</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Strategy</th>
+                <th class="num">Target N</th>
+                <th class="num">Cost</th>
+                <th class="num">6m Net</th>
+                <th class="num">6m ROI</th>
+                <th class="num">12m ROI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Blanket (All 100k)</td>
+                <td class="num">100,000</td>
+                <td class="num">$2.50M</td>
+                <td class="num">$934.7K</td>
+                <td class="num">37.4%</td>
+                <td class="num">174.8%</td>
+              </tr>
+              <tr>
+                <td>Model (<code>p &ge; 0.40</code>)</td>
+                <td class="num">72,115</td>
+                <td class="num">$1.80M</td>
+                <td class="num">$1.02M</td>
+                <td class="num">56.8%</td>
+                <td class="num">213.7%</td>
+              </tr>
+              <tr>
+                <td>Model (<code>p &ge; 0.50</code>)</td>
+                <td class="num">50,820</td>
+                <td class="num">$1.27M</td>
+                <td class="num">$922.0K</td>
+                <td class="num">72.6%</td>
+                <td class="num">245.1%</td>
+              </tr>
+              <tr>
+                <td>Top Quintile (<code>Q5</code>)</td>
+                <td class="num">20,000</td>
+                <td class="num">$500.0K</td>
+                <td class="num">$486.1K</td>
+                <td class="num">97.2%</td>
+                <td class="num">294.5%</td>
+              </tr>
+              <tr class="highlight">
+                <td><strong>Tiered (T1 + T2)</strong></td>
+                <td class="num">19,340</td>
+                <td class="num">$468.7K</td>
+                <td class="num">$704.5K</td>
+                <td class="num">150.3%</td>
+                <td class="num">400.6%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-teal" style="margin-top: 8px;">
+          <div class="card-title" style="font-size: 11px;">Tier-Level ROI Breakdown (6-Mo / 12-Mo)</div>
+          <ul class="clean">
+            <li><strong>Tier 1A:</strong> +$146.3K (77.9%) / +$480.4K (255.7%)</li>
+            <li><strong>Tier 1B:</strong> +$369.8K (277.2%) / +$872.9K (654.5%)</li>
+            <li><strong>Tier 2:</strong> +$188.4K (127.8%) / +$524.2K (355.5%)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="fig-wrap">
+        <img src="../outputs/figures/impact_targeting_comparison.png" alt="Targeting Strategy Comparison">
+        <div class="fig-caption">Recommended Tiered Program achieves 4.0x the 6-month ROI of blanket retention and +45% higher net impact than untargeted Q5.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Source: scripts/03_business_impact.py &amp; outputs/business_proposal.md</span>
+    <span>Slide 11 / 14</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 12: SENSITIVITY & BREAK-EVEN ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="eyebrow">11 · Sensitivity &amp; Break-Even Analysis</div>
+      <div class="slide-title">Profitable Even at 10% Win-Back; 7.99% (6m) / 4.00% (12m) Break-Even</div>
+      <div class="slide-subtitle">Broad threshold rules (p &ge; 0.40, p &ge; 0.50, Q5) lose money at 10% win-back—only Value-Tiered stays positive</div>
+    </div>
+    <div class="header-badge">Break-Even: 7.99% (6m)</div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-55-45" style="flex: 1; min-height: 0;">
+      <div class="fig-wrap">
+        <img src="../outputs/figures/impact_sensitivity_breakeven.png" alt="Sensitivity and Break-Even Analysis">
+        <div class="fig-caption">Net Financial Impact across 10%–30% win-back rates &amp; break-even thresholds (7.99% 6-mo / 4.00% 12-mo vs. 14.56% blanket).</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; min-height: 0;">
+        <div class="card-white">
+          <div class="card-title">Win-Back Rate Sensitivity ($468.7K Fixed Cost)</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Win-Back Scenario</th>
+                <th class="num">Retained</th>
+                <th class="num">6m Net</th>
+                <th class="num">6m ROI</th>
+                <th class="num">12m Net</th>
+                <th class="num">12m ROI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>10% (Pessimistic)</strong></td>
+                <td class="num">1,326</td>
+                <td class="num">+$117.9K</td>
+                <td class="num">25.1%</td>
+                <td class="num">+$704.5K</td>
+                <td class="num">150.3%</td>
+              </tr>
+              <tr>
+                <td>15% (Conservative)</td>
+                <td class="num">1,989</td>
+                <td class="num">+$411.2K</td>
+                <td class="num">87.7%</td>
+                <td class="num">+$1.29M</td>
+                <td class="num">275.4%</td>
+              </tr>
+              <tr class="highlight">
+                <td><strong>20% (Base Case)</strong></td>
+                <td class="num">2,652</td>
+                <td class="num">+$704.5K</td>
+                <td class="num">150.3%</td>
+                <td class="num">+$1.88M</td>
+                <td class="num">400.6%</td>
+              </tr>
+              <tr>
+                <td>25% (Upside)</td>
+                <td class="num">3,315</td>
+                <td class="num">+$997.7K</td>
+                <td class="num">212.9%</td>
+                <td class="num">+$2.46M</td>
+                <td class="num">525.7%</td>
+              </tr>
+              <tr>
+                <td>30% (Stretch)</td>
+                <td class="num">3,978</td>
+                <td class="num">+$1.29M</td>
+                <td class="num">275.4%</td>
+                <td class="num">+$3.05M</td>
+                <td class="num">650.9%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-amber" style="flex: 1;">
+          <div class="card-title">Downside Protection vs. Alternative Rules (6-Mo Net @ 10% WB)</div>
+          <ul class="clean">
+            <li><strong><code>p &ge; 0.40</code> (72.1k subs):</strong> <strong>-$389.1K loss</strong> (12.75% break-even).</li>
+            <li><strong><code>p &ge; 0.50</code> (50.8k subs):</strong> <strong>-$174.3K loss</strong> (11.59% break-even).</li>
+            <li><strong>Untargeted <code>Q5</code> (20.0k subs):</strong> <strong>-$6.9K loss</strong> (10.14% break-even).</li>
+            <li><strong>Recommended Tiered (T1+T2):</strong> <strong>+$117.9K profit</strong> (<strong>7.99%</strong> break-even)—cuts break-even risk nearly in half vs. blanket (14.56%).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Source: scripts/03_business_impact.py &amp; outputs/business_proposal.md</span>
+    <span>Slide 12 / 14</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 13: NEXT STEPS & RISK MATRIX ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="eyebrow">12 · Implementation &amp; Governance</div>
+      <div class="slide-title">Next Steps: 90-Day A/B Pilot ($46.9K) &amp; Risk Mitigation Matrix</div>
+      <div class="slide-subtitle">Controlled 50/50 randomized test on 20% of eligible cohort (~3,868 subs) with clear Go/No-Go gates tied to break-even</div>
+    </div>
+    <div class="header-badge">Go Gate: &ge; 8.0 pp Reduction</div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-3" style="flex-shrink: 0;">
+      <div class="card-teal">
+        <div class="card-title" style="font-size: 11.5px;">Pilot Design (90-Day A/B Test)</div>
+        <ul class="clean">
+          <li><strong>Sample:</strong> 20% of eligible cohort (<strong>3,868 subs</strong>), stratified by Tier 1A/1B/2 &amp; region.</li>
+          <li><strong>50/50 Split:</strong> 1,934 Treatment vs. 1,934 BAU Control; <strong>$46,870</strong> budget (10% of annual cost).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size: 11.5px;">Decision Gates (Tied to Break-Even)</div>
+        <ul class="clean">
+          <li><strong>Go (&ge;8.0 pp):</strong> Exceeds 7.99% 6-mo break-even + positive Net ARPU &rarr; Full 100k rollout.</li>
+          <li><strong>Iterate (4.0%–7.99%):</strong> Tighten Tier 1A cost or restrict Tier 2 to D10 (78.5%).</li>
+          <li><strong>No-Go (&lt;4.0%):</strong> Halt / pivot if negative ARPU lift.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size: 11.5px;">12-Week Execution Roadmap</div>
+        <ul class="clean">
+          <li><strong>Wk 1–2 (Setup):</strong> DS &amp; CRM Ops deploy weekly XGBoost scoring &amp; lock randomization.</li>
+          <li><strong>Wk 3–10 (Run):</strong> Retention Mktg &amp; Priority Care launch Tier 1/2 offers (&lt;10-min SLA).</li>
+          <li><strong>Wk 11–12 (Readout):</strong> Finance &amp; Analytics audit 31–60d churn &rarr; VP Retention.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card-white" style="flex: 1;">
+      <div class="card-title">Key Risks &amp; Mitigation Matrix</div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 18%;">Risk Category</th>
+            <th style="width: 32%;">Specific Failure Mode</th>
+            <th style="width: 50%;">Mitigation Strategy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. Deadweight Loss</strong></td>
+            <td>Subsidizing false positives (31.4% of targeted cohort who would stay anyway).</td>
+            <td>Already priced into all ROI/break-even math; further reduced via <strong>triggered delivery</strong> (Tier 1A EIP credit issued only upon engagement) and Q5 + behavioral gating.</td>
+          </tr>
+          <tr>
+            <td><strong>2. ARPU Cannibalization</strong></td>
+            <td>Plan-rightsizing lowers recurring revenue from heavy overage payers (&gt;$115/mo).</td>
+            <td>Cap bill credits at <strong>15% of monthly ARPU</strong> ($15–$25 one-time or 3-mo promo) instead of permanent rate-plan downgrades; track <strong>Net ARPU</strong> in A/B pilot.</td>
+          </tr>
+          <tr>
+            <td><strong>3. Care Center Capacity</strong></td>
+            <td>Outbound Tier 1 calls overwhelm reps, causing &gt;10-min waits or 20%–25% transfers.</td>
+            <td>Route Tier 2 (50.8% of volume) to <strong>100% automated SMS/app self-service</strong>, reserving live reps strictly for Tier 1 (~150 calls/day over 90 days).</td>
+          </tr>
+          <tr>
+            <td><strong>4. Data &amp; Seasonality</strong></td>
+            <td>22%–49% demographic missingness, negative <code>eqpdays</code>, or Q4 flagship promo spikes.</td>
+            <td>Model relies on &gt;97% complete billing/usage fields with anomaly clipping; refresh XGBoost scores <strong>monthly</strong> and pre-stage Tier 1A offers 30 days before Q4 launches.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Source: outputs/business_proposal.md (Section 5 &amp; Section 6)</span>
+    <span>Slide 13 / 14</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 14: REFERENCES & METHODOLOGY ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <div>
+      <div class="eyebrow">13 · References &amp; Reproducibility</div>
+      <div class="slide-title">Industry References, Pipeline Artifacts &amp; GenAI Disclosure</div>
+      <div class="slide-subtitle">All external benchmarks and internal modeling outputs are fully reproducible from repository scripts</div>
+    </div>
+    <div class="header-badge">9 Verified Sources</div>
+  </div>
+
+  <div class="slide-body">
+    <div class="grid-12-8" style="flex: 1; min-height: 0;">
+      <div class="ref-list">
+        <div class="ref-item"><span class="ref-num">[1]</span> Grand View Research. "U.S. Telecom Services Market Size, Share &amp; Trends Analysis Report." <span class="ref-url">https://www.grandviewresearch.com/industry-analysis/us-telecom-services-market-report</span></div>
+        <div class="ref-item"><span class="ref-num">[2]</span> Mordor Intelligence. "United States Telecom Market Size &amp; Share Analysis - Growth Trends &amp; Forecasts." <span class="ref-url">https://www.mordorintelligence.com/industry-reports/united-states-telecom-market</span></div>
+        <div class="ref-item"><span class="ref-num">[3]</span> TeleGeography. "2025 Mobile Market Summary." <span class="ref-url">https://resources.telegeography.com/2025-mobile-market-summary</span></div>
+        <div class="ref-item"><span class="ref-num">[4]</span> PwC. "Global Telecom Outlook Perspectives." <span class="ref-url">https://www.pwc.com/gx/en/1/industries/technology-media-telecom/telecom-outlook-perspectives.html</span></div>
+        <div class="ref-item"><span class="ref-num">[5]</span> The Motley Fool (2026). "America's Favorite Wireless Service: AT&amp;T, Verizon, or T-Mobile?" <span class="ref-url">https://www.fool.com/investing/2026/03/14/america-favorite-wireless-service-att-verizon-tmus/</span></div>
+        <div class="ref-item"><span class="ref-num">[6]</span> ChurnCost. "Telecom Churn Rate Benchmarks &amp; Industry Analysis." <span class="ref-url">https://churncost.com/telecom</span></div>
+        <div class="ref-item"><span class="ref-num">[7]</span> Artisan Growth Strategies. "Customer Acquisition Cost vs. Retention Cost: Analysis &amp; Benchmarks." <span class="ref-url">https://www.artisangrowthstrategies.com/blog/customer-acquisition-cost-vs-retention-cost-analysis-benchmarks</span></div>
+        <div class="ref-item"><span class="ref-num">[8]</span> J.D. Power / BusinessWire (2026). "Easy to Work With, Hard to Leave: Simplicity Drives Wireless Customer Loyalty." <span class="ref-url">https://www.businesswire.com/news/home/20260129508649/en/Easy-to-Work-With-Hard-to-Leave-Simplicity-Drives-Wireless-Customer-Loyalty-J.D.-Power-Finds</span></div>
+        <div class="ref-item"><span class="ref-num">[9]</span> Telecompetitor. "Wireless Customer Satisfaction Scores Fall, J.D. Power Report." <span class="ref-url">https://www.telecompetitor.com/wireless-customer-satisfaction-scores-fall-j-d-power-report/</span></div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div class="card">
+          <div class="card-title">Reproducible Code &amp; Artifacts</div>
+          <ul class="clean">
+            <li><strong>EDA:</strong> <code>scripts/01_eda.py</code> &rarr; <code>outputs/eda_summary.md</code> + 5 figures</li>
+            <li><strong>Modeling:</strong> <code>scripts/02_modeling.py</code> &rarr; <code>outputs/model_summary.md</code> + <code>test_predictions.csv</code> + 4 figures</li>
+            <li><strong>Business Impact:</strong> <code>scripts/03_business_impact.py</code> &rarr; <code>outputs/business_proposal.md</code> + 2 figures</li>
+            <li><strong>Notebook:</strong> <code>JoseAlonsoYanezMejia.ipynb</code> (end-to-end narrative)</li>
+          </ul>
+        </div>
+
+        <div class="card-teal">
+          <div class="card-title">Methodology Notes</div>
+          <ul class="clean">
+            <li>All preprocessing (imputation, OHE, scaling) fit strictly on 5-fold training splits (zero data leakage).</li>
+            <li>Financial impact scaled 5x from 20,000 held-out test subscribers to 100,000 base; CAC avoidance ($663K) reported separately.</li>
+          </ul>
+        </div>
+
+        <div class="card-amber" style="flex: 1;">
+          <div class="card-title">GenAI Usage &amp; Chat Disclosure</div>
+          <p style="font-size: 10.5px; line-height: 1.4; color: var(--slate-700);">
+            AI assistance was used for market synthesis, code scaffolding, visualization formatting, and slide drafting. All metrics were verified against executed Python outputs.
+          </p>
+          <div style="margin-top: 8px; padding: 6px 8px; background: #FFFFFF; border: 1px dashed var(--amber); border-radius: 4px; font-size: 10px; color: #92400E;">
+            <strong>GenAI Chat Session URL:</strong> <code>[Placeholder: Insert GenAI Chat/Transcript URL Here]</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>Source: outputs/references.txt &amp; GCI World 2026 Final Assignment Guidelines</span>
+    <span>Slide 14 / 14</span>
+  </div>
+</section>
+
+</body>
+</html>
